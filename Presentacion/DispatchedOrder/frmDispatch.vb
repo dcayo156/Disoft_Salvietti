@@ -249,9 +249,15 @@ Public Class frmDispatch
                 .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
                 .Visible = True
             End With
-
-            With dgjProducto.RootTable.Columns("Cantidad")
+            With dgjProducto.RootTable.Columns("CantidadConversion")
                 .Caption = "Cantidad"
+                .Width = 80
+                .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
+                .Visible = True
+                .FormatString = "0.00"
+            End With
+            With dgjProducto.RootTable.Columns("Cantidad")
+                .Caption = "Unidad"
                 .Width = 80
                 .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
                 .Visible = True

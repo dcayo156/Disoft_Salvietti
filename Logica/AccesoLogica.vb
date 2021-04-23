@@ -1387,8 +1387,19 @@ Public Class AccesoLogica
         Else
             _Where = "obnumi=" + _idCabecera + " AND obcprod=canumi AND iacprod=obcprod"
         End If
-        _Tabla = D_Datos_Tabla("obnumi,obcprod, cacod, cadesc,obpcant,obpbase,obptot,obdesc,obtotal,obfamilia, obcampo1, iacant", "TO0011,TC001, TI001", _Where)
+        _Tabla = D_Datos_Tabla("obnumi,obcprod, cacod, cadesc,obCantidad,obpcant,obpbase,obptot,obdesc,obtotal,obfamilia, obcampo1, iacant", "TO0011,TC001, TI001", _Where)
         Return _Tabla
+    End Function
+    Public Shared Function L_ObtenerUnidadConversionProducto(productoId) As Decimal
+        Dim _Tabla As DataTable
+        Dim _Where As String
+        Dim resultado As Decimal = 0
+        _Where = "canumi=" + productoId
+        _Tabla = D_Datos_Tabla("caconv", "TC001", _Where)
+        If _Tabla.Rows.Count > 0 Then
+            resultado = _Tabla.Rows(0).Item(0)
+        End If
+        Return resultado
     End Function
     Public Shared Sub L_PedidoDetalle_Grabar(_idCabecera As String, _codProd As String, _cantidad As String, _precio As String, _subTotal As String, _desc As String, _total As String, _flia As String)
         Dim _Err As Boolean
@@ -1399,7 +1410,9 @@ Public Class AccesoLogica
         Sql = _idCabecera + ",'" + _codProd + "'," + _cantidad + "," + _precio + "," + _subTotal + "," + _desc + "," + _total + "," + _flia + "," + campo1 + "," + campo2
         _Err = D_Insertar_Datos("TO0011", Sql)
     End Sub
-    Public Shared Sub L_PedidoDetalle_GrabarNuevo(_idCabecera As String, _codProd As String, _cantidad As String, _precio As String, _subTotal As String, _desc As String, _total As String, _flia As String, _atributo As String)
+    Public Shared Sub L_PedidoDetalle_GrabarNuevo(_idCabecera As String, _codProd As String, _cantidad As String,
+                                                  _precio As String, _subTotal As String, _desc As String, _total As String,
+                                                  _flia As String, _atributo As String, _cantidadConversion As String)
         Dim _Err As Boolean
         Dim Sql As String
 
@@ -1412,7 +1425,7 @@ Public Class AccesoLogica
         Dim campo2 As String
         campo2 = _Tabla.Rows(0).Item("chprecio").ToString
 
-        Sql = _idCabecera + ",'" + _codProd + "'," + _cantidad + "," + _precio + "," + _subTotal + "," + _desc + "," + _total + "," + _flia + "," + _atributo + "," + campo2
+        Sql = _idCabecera + ",'" + _codProd + "'," + _cantidad + "," + _precio + "," + _subTotal + "," + _desc + "," + _total + "," + _flia + "," + _atributo + "," + campo2 + "," + _cantidadConversion
         _Err = D_Insertar_Datos("TO0011", Sql)
     End Sub
 

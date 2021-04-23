@@ -1062,8 +1062,8 @@ Public Class frmBillingDispatch
                           .cadesc = grupo.FirstOrDefault().cadesc,
                           .categoria = grupo.FirstOrDefault().categoria,
                           .obpcant = grupo.Sum(Function(item) item.obpcant),
-                          .Caja = grupo.Sum(Function(item) item.Caja),
-                          .Unidad = grupo.Sum(Function(item) item.Unidad),
+                          .Caja = IIf(grupo.Sum(Function(item) item.Unidad) > 0, grupo.Sum(Function(item) item.Caja) + 1, grupo.Sum(Function(item) item.Caja)),
+                          .Unidad = IIf(grupo.Sum(Function(item) item.Unidad) > 0, 0, grupo.Sum(Function(item) item.Unidad)),
                           .Total = grupo.Sum(Function(item) item.Total)
                         }).ToList()
             If (lista.Count = 0) Then
@@ -1326,9 +1326,15 @@ Public Class frmBillingDispatch
                 .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
                 .Visible = True
             End With
-
-            With dgjProducto.RootTable.Columns("Cantidad")
+            With dgjProducto.RootTable.Columns("CantidadConversion")
                 .Caption = "Cantidad"
+                .Width = 80
+                .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
+                .Visible = True
+                .FormatString = "0.00"
+            End With
+            With dgjProducto.RootTable.Columns("Cantidad")
+                .Caption = "Unidad"
                 .Width = 80
                 .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
                 .Visible = True

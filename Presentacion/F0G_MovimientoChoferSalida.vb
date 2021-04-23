@@ -241,7 +241,7 @@ Public Class F0G_MovimientoChoferSalida
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
             .Visible = True
             .FormatString = "0.00"
-            .Caption = "Cantidad".ToUpper
+            .Caption = "Unidad".ToUpper
         End With
 
         With grdetalle.RootTable.Columns("estado")
@@ -259,6 +259,14 @@ Public Class F0G_MovimientoChoferSalida
             .GroupByBoxVisible = False
             'diseño de la grilla
             .VisualStyle = VisualStyle.Office2007
+        End With
+
+        With grdetalle.RootTable.Columns("Caja")
+            .Width = 160
+            .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
+            .Visible = True
+            .FormatString = "0.00"
+            .Caption = "Caja".ToUpper
         End With
     End Sub
 
@@ -1324,12 +1332,14 @@ salirIf:
                     CType(grdetalle.DataSource, DataTable).Clear()
                     Dim i = 0
                     For Each item In lista
+                        Dim unidadConversion As Decimal = L_ObtenerUnidadConversionProducto(item.canumi.ToString())
                         _prAddDetalleVenta()
                         CType(grdetalle.DataSource, DataTable).Rows(i).Item("iccprod") = item.canumi
                         CType(grdetalle.DataSource, DataTable).Rows(i).Item("cacod") = item.cacod
                         CType(grdetalle.DataSource, DataTable).Rows(i).Item("producto") = item.cadesc
 
                         CType(grdetalle.DataSource, DataTable).Rows(i).Item("iccant") = item.obpcant
+                        CType(grdetalle.DataSource, DataTable).Rows(i).Item("Caja") = Convert.ToInt32(item.obpcant / unidadConversion)
                         i += 1
                     Next
                     _prCargarProductos()

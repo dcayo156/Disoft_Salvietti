@@ -14,6 +14,7 @@ Public Class RProducto
                                                         Select New VProducto With {
                                                             .Id = a.canumi,
                                                             .NombreProducto = a.cadesc,
+                                                            .CantidadConversion = b.obCantidad,
                                                             .Cantidad = b.obpcant,
                                                             .Precio = b.obpbase,
                                                             .SubTotal = b.obptot,

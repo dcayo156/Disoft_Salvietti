@@ -19,6 +19,16 @@
         End Set
     End Property
 
+    Private _cantidadConversion As Decimal
+    Public Property CantidadConversion() As Decimal
+        Get
+            Return _cantidadConversion
+        End Get
+        Set(ByVal value As Decimal)
+            _cantidadConversion = value
+        End Set
+    End Property
+
     Private _cantidad As Decimal
     Public Property Cantidad() As Decimal
         Get

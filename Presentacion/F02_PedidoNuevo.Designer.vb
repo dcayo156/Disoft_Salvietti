@@ -96,6 +96,7 @@ Partial Class F02_PedidoNuevo
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.GroupPanel1 = New DevComponents.DotNetBar.Controls.GroupPanel()
         Me.PanelEx4 = New DevComponents.DotNetBar.PanelEx()
+        Me.Tb_CantProd2 = New DevComponents.Editors.DoubleInput()
         Me.QrFactura = New Gma.QrCodeNet.Encoding.Windows.Forms.QrCodeImgControl()
         Me.Tb_CantProd = New DevComponents.DotNetBar.Controls.TextBoxX()
         Me.Btn_AddProd = New DevComponents.DotNetBar.ButtonX()
@@ -191,6 +192,7 @@ Partial Class F02_PedidoNuevo
         Me.TableLayoutPanel2.SuspendLayout()
         Me.GroupPanel1.SuspendLayout()
         Me.PanelEx4.SuspendLayout()
+        CType(Me.Tb_CantProd2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.QrFactura, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.JGr_Productos, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupPanel2.SuspendLayout()
@@ -1536,6 +1538,7 @@ Partial Class F02_PedidoNuevo
         Me.PanelEx4.AutoScroll = True
         Me.PanelEx4.CanvasColor = System.Drawing.SystemColors.Control
         Me.PanelEx4.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled
+        Me.PanelEx4.Controls.Add(Me.Tb_CantProd2)
         Me.PanelEx4.Controls.Add(Me.QrFactura)
         Me.PanelEx4.Controls.Add(Me.Tb_CantProd)
         Me.PanelEx4.Controls.Add(Me.Btn_AddProd)
@@ -1554,6 +1557,25 @@ Partial Class F02_PedidoNuevo
         Me.PanelEx4.Style.ForeColor.ColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText
         Me.PanelEx4.Style.GradientAngle = 90
         Me.PanelEx4.TabIndex = 25
+        '
+        'Tb_CantProd2
+        '
+        Me.Tb_CantProd2.AutoOverwrite = True
+        '
+        '
+        '
+        Me.Tb_CantProd2.BackgroundStyle.Class = "DateTimeInputBackground"
+        Me.Tb_CantProd2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.Tb_CantProd2.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2
+        Me.Tb_CantProd2.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Tb_CantProd2.ForeColor = System.Drawing.Color.Black
+        Me.Tb_CantProd2.Increment = 1.0R
+        Me.Tb_CantProd2.Location = New System.Drawing.Point(72, 443)
+        Me.Tb_CantProd2.MinValue = 0R
+        Me.Tb_CantProd2.Name = "Tb_CantProd2"
+        Me.Tb_CantProd2.Size = New System.Drawing.Size(100, 26)
+        Me.Tb_CantProd2.TabIndex = 29
+        Me.Tb_CantProd2.WatermarkAlignment = DevComponents.Editors.eTextAlignment.Right
         '
         'QrFactura
         '
@@ -1577,11 +1599,12 @@ Partial Class F02_PedidoNuevo
         '
         Me.Tb_CantProd.Border.Class = "TextBoxBorder"
         Me.Tb_CantProd.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.Tb_CantProd.Location = New System.Drawing.Point(72, 443)
+        Me.Tb_CantProd.Location = New System.Drawing.Point(72, 492)
         Me.Tb_CantProd.Name = "Tb_CantProd"
         Me.Tb_CantProd.PreventEnterBeep = True
         Me.Tb_CantProd.Size = New System.Drawing.Size(100, 23)
         Me.Tb_CantProd.TabIndex = 27
+        Me.Tb_CantProd.Visible = False
         '
         'Btn_AddProd
         '
@@ -2523,6 +2546,7 @@ Partial Class F02_PedidoNuevo
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.GroupPanel1.ResumeLayout(False)
         Me.PanelEx4.ResumeLayout(False)
+        CType(Me.Tb_CantProd2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.QrFactura, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.JGr_Productos, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupPanel2.ResumeLayout(False)
@@ -2683,4 +2707,5 @@ Partial Class F02_PedidoNuevo
     Friend WithEvents QrFactura As Gma.QrCodeNet.Encoding.Windows.Forms.QrCodeImgControl
     Friend WithEvents dtpFechaVenc As DateTimePicker
     Friend WithEvents lbFVenc As DevComponents.DotNetBar.LabelX
+    Friend WithEvents Tb_CantProd2 As DevComponents.Editors.DoubleInput
 End Class
