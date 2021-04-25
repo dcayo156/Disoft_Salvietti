@@ -104,4 +104,14 @@
             _Total = value
         End Set
     End Property
+
+    Private _conversion As Decimal
+    Public Property Conversion() As Decimal
+        Get
+            Return _conversion
+        End Get
+        Set(ByVal value As Decimal)
+            _conversion = value
+        End Set
+    End Property
 End Class

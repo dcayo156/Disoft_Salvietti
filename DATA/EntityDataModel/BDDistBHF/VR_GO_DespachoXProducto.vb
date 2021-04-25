@@ -25,5 +25,6 @@ Partial Public Class VR_GO_DespachoXProducto
     Public Property caja As Nullable(Of Decimal)
     Public Property Unidad As Nullable(Of Decimal)
     Public Property Total As Nullable(Of Decimal)
+    Public Property caconv As Nullable(Of Decimal)
 
 End Class

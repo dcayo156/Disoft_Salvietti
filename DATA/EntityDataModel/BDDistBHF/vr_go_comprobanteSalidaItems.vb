@@ -23,5 +23,6 @@ Partial Public Class vr_go_comprobanteSalidaItems
     Public Property nproducto As String
     Public Property cantidad As Nullable(Of Decimal)
     Public Property codprod As String
+    Public Property Caja As Nullable(Of Integer)
 
 End Class

@@ -1052,7 +1052,9 @@ Public Class frmBillingDispatch
             If (Convert.ToInt32(idChofer) = ENCombo.ID_SELECCIONAR) Then
                 Throw New Exception("Debe seleccionar un chofer.")
             End If
-
+            '.obpcant = IIf(grupo.Sum(Function(item) item.Unidad) > 0,
+            '                 (grupo.Sum(Function(item) item.Caja) + 1) * grupo.FirstOrDefault().Conversion,
+            '                 grupo.Sum(Function(item) item.Caja)) * grupo.FirstOrDefault().Conversion,
             Dim listResult = New LPedido().ListarDespachoXProductoDeChofer(idChofer, IIf(cbEstado.SelectedIndex = 0, ENEstadoPedido.DICTADO, ENEstadoPedido.ENTREGADO), Tb_Fecha.Value, Tb_FechaHasta.Value)
             Dim lista = (From a In listResult
                          Group a By a.canumi, a.cadesc, a.categoria Into grupo = Group
@@ -1061,8 +1063,12 @@ Public Class frmBillingDispatch
                           .cacod = grupo.FirstOrDefault().cacod,
                           .cadesc = grupo.FirstOrDefault().cadesc,
                           .categoria = grupo.FirstOrDefault().categoria,
-                          .obpcant = grupo.Sum(Function(item) item.obpcant),
-                          .Caja = IIf(grupo.Sum(Function(item) item.Unidad) > 0, grupo.Sum(Function(item) item.Caja) + 1, grupo.Sum(Function(item) item.Caja)),
+                          .obpcant = IIf(grupo.Sum(Function(item) item.Unidad) > 0,
+                             (grupo.Sum(Function(item) item.Caja) + 1),
+                             grupo.Sum(Function(item) item.Caja)) * grupo.FirstOrDefault().Conversion,
+                          .Caja = IIf(grupo.Sum(Function(item) item.Unidad) > 0,
+                             grupo.Sum(Function(item) item.Caja) + 1,
+                             grupo.Sum(Function(item) item.Caja)),
                           .Unidad = IIf(grupo.Sum(Function(item) item.Unidad) > 0, 0, grupo.Sum(Function(item) item.Unidad)),
                           .Total = grupo.Sum(Function(item) item.Total)
                         }).ToList()

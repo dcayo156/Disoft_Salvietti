@@ -134,7 +134,8 @@ Public Class RPedido
                                    .obpcant = a.obpcant,
                                    .Caja = a.caja,
                                    .Unidad = a.Unidad,
-                                   .Total = a.Total
+                                   .Total = a.Total,
+                                   .Conversion = a.caconv
                                    }).ToList()
                 ' Group a By a.canumi, a.cadesc, a.categoria Into grupo = Group
                 'Select New RDespachoXProducto With {

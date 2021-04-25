@@ -623,7 +623,7 @@ Public Class P_Principal
     Private Sub btLogiMovChoferSalida_Click(sender As Object, e As EventArgs) Handles btLogiMovChoferSalida.Click
         'SideNav1.IsMenuExpanded = False
         'FP_Ventana.Select()
-        F0G_MovimientoChoferSalida.AllowTransparency = True
+        'F0G_MovimientoChoferSalida.AllowTransparency = True
         Dim frm As New F0G_MovimientoChoferSalida
         'Dim tab3 As SuperTabItem = superTabControlVentana.CreateTab(frm.Text)
         frm._nameButton = btLogiMovChoferSalida.Name
