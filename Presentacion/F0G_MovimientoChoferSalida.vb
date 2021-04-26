@@ -12,6 +12,7 @@ Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports LOGIC
 Imports ENTITY
+Imports UTILITIES
 
 Public Class F0G_MovimientoChoferSalida
     Dim _Inter As Integer = 0
@@ -1233,54 +1234,68 @@ salirIf:
         End If
     End Sub
     Private Sub P_prAyudaChoferNuevo()
-        Dim dt As DataTable
+        Try
+            Dim dt As DataTable
 
-        dt = L_prListarChoferesPedidosPendientes()
-        '   a.cbnumi ,a.cbdesc ,a.cbci ,a.cbfnac
-
-        Dim listEstCeldas As New List(Of Modelo.MCelda)
-        listEstCeldas.Add(New Modelo.MCelda("oaccbnumi,", True, "CÓDIGO", 70))
-        listEstCeldas.Add(New Modelo.MCelda("cbdesc", True, "NOMBRE", 280))
-        listEstCeldas.Add(New Modelo.MCelda("oacnconc", False, "CONCILICACION", 150))
-        listEstCeldas.Add(New Modelo.MCelda("oaest", False, "ESTADO", 150))
-        listEstCeldas.Add(New Modelo.MCelda("oaap", False, "oaap".ToUpper, 150))
-        listEstCeldas.Add(New Modelo.MCelda("oafdoc", True, "FECHA PEDIDO", 220, "MM/dd/YYYY"))
-
-        Dim ef = New Efecto
-        ef.tipo = 3
-        ef.dt = dt
-        ef.SeleclCol = 2
-        ef.listEstCeldas = listEstCeldas
-        ef.alto = 50
-        ef.ancho = 350
-        ef.Context = "Seleccione chofer".ToUpper
-        ef.ShowDialog()
-        Dim bandera As Boolean = False
-        bandera = ef.band
-        If (bandera = True) Then
-            Dim Row As Janus.Windows.GridEX.GridEXRow = ef.Row
-
-            _codChofer = Row.Cells("oaccbnumi").Value
-            tbChofer.Text = Row.Cells("cbdesc").Value
-            _fechapedido = Row.Cells("oafdoc").Value
-            cbConcepto.Focus()
-
-            _prCargarDetalleVenta(-1)
-            _prAddDetalleVenta()
-            'With grdetalle.RootTable.Columns("img")
-            '    .Width = 80
-            '    .Caption = "Eliminar".ToUpper
-            '    .CellStyle.ImageHorizontalAlignment = ImageHorizontalAlignment.Center
-            '    .Visible = True
-            'End With
-            _prObtenerNumiConciliacionTI0022()
-
-            If (P_Global.gb_despacho) Then
-                CargarDespachoDeChoferNuevo(_codChofer, _fechapedido)
+            dt = L_prListarChoferesPedidosPendientes()
+            '   a.cbnumi ,a.cbdesc ,a.cbci ,a.cbfnac
+            If dt.Rows.Count = 0 Then
+                Throw New Exception("Lista vacia")
             End If
-        End If
-    End Sub
+            Dim listEstCeldas As New List(Of Modelo.MCelda)
+            listEstCeldas.Add(New Modelo.MCelda("oaccbnumi,", True, "CÓDIGO", 70))
+            listEstCeldas.Add(New Modelo.MCelda("cbdesc", True, "NOMBRE", 280))
+            listEstCeldas.Add(New Modelo.MCelda("oacnconc", False, "CONCILICACION", 150))
+            listEstCeldas.Add(New Modelo.MCelda("oaest", False, "ESTADO", 150))
+            listEstCeldas.Add(New Modelo.MCelda("oaap", False, "oaap".ToUpper, 150))
+            listEstCeldas.Add(New Modelo.MCelda("oafdoc", True, "FECHA PEDIDO", 220, "MM/dd/YYYY"))
 
+            Dim ef = New Efecto
+            ef.tipo = 3
+            ef.dt = dt
+            ef.SeleclCol = 2
+            ef.listEstCeldas = listEstCeldas
+            ef.alto = 50
+            ef.ancho = 350
+            ef.Context = "Seleccione chofer".ToUpper
+            ef.ShowDialog()
+            Dim bandera As Boolean = False
+            bandera = ef.band
+            If (bandera = True) Then
+                Dim Row As Janus.Windows.GridEX.GridEXRow = ef.Row
+
+                _codChofer = Row.Cells("oaccbnumi").Value
+                tbChofer.Text = Row.Cells("cbdesc").Value
+                _fechapedido = Row.Cells("oafdoc").Value
+                cbConcepto.Focus()
+
+                _prCargarDetalleVenta(-1)
+                _prAddDetalleVenta()
+                'With grdetalle.RootTable.Columns("img")
+                '    .Width = 80
+                '    .Caption = "Eliminar".ToUpper
+                '    .CellStyle.ImageHorizontalAlignment = ImageHorizontalAlignment.Center
+                '    .Visible = True
+                'End With
+                _prObtenerNumiConciliacionTI0022()
+
+                If (P_Global.gb_despacho) Then
+                    CargarDespachoDeChoferNuevo(_codChofer, _fechapedido)
+                End If
+            End If
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+        End Try
+
+    End Sub
+    Private Sub MostrarMensajeError(mensaje As String)
+        ToastNotification.Show(Me,
+                               mensaje.ToUpper,
+                               My.Resources.WARNING,
+                               ENMensaje.MEDIANO,
+                               eToastGlowColor.Red,
+                               eToastPosition.TopCenter)
+    End Sub
     Private Sub CargarDespachoDeChofer(codChofer As Integer)
         Try
             Dim listResult = New LPedido().ListarDespachoXProductoDeChoferSalida(codChofer)
@@ -1333,13 +1348,18 @@ salirIf:
                     Dim i = 0
                     For Each item In lista
                         Dim unidadConversion As Decimal = L_ObtenerUnidadConversionProducto(item.canumi.ToString())
+                        Dim unidad = item.obpcant - Convert.ToInt32(item.obpcant / unidadConversion) * unidadConversion
+                        Dim caja = IIf(unidad > 0,
+                                       Convert.ToInt32(item.obpcant / unidadConversion) + 1,
+                                       Convert.ToInt32(item.obpcant / unidadConversion))
+                        Dim cantidad = caja * unidadConversion
                         _prAddDetalleVenta()
                         CType(grdetalle.DataSource, DataTable).Rows(i).Item("iccprod") = item.canumi
                         CType(grdetalle.DataSource, DataTable).Rows(i).Item("cacod") = item.cacod
                         CType(grdetalle.DataSource, DataTable).Rows(i).Item("producto") = item.cadesc
 
-                        CType(grdetalle.DataSource, DataTable).Rows(i).Item("iccant") = item.obpcant
-                        CType(grdetalle.DataSource, DataTable).Rows(i).Item("Caja") = Convert.ToInt32(item.obpcant / unidadConversion)
+                        CType(grdetalle.DataSource, DataTable).Rows(i).Item("iccant") = cantidad
+                        CType(grdetalle.DataSource, DataTable).Rows(i).Item("Caja") = caja
                         i += 1
                     Next
                     _prCargarProductos()
