@@ -59,9 +59,30 @@ Public Class F02_PedidoNuevo
 
         tbFechaDel.Value = Now.Date
         tbFechaAl.Value = Now.Date
-
+        P_prArmarComboCatCliente()
         'Ocultar boton Eliminar
         MBtEliminar.Visible = False
+    End Sub
+
+
+    Private Sub P_prArmarComboCatCliente()
+
+        Dim Dt As New DataTable
+        Dt = L_CategoriaPrecioGeneralSinCosto()
+        With CbCategoria.DropDownList
+            .Columns.Add(Dt.Columns(0).ToString).Width = 50
+            .Columns(0).Caption = "Código"
+
+
+
+            .Columns.Add(Dt.Columns(1).ToString).Width = 120
+            .Columns(1).Caption = "Descripción"
+        End With
+
+        CbCategoria.ValueMember = Dt.Columns(0).ToString
+        CbCategoria.DisplayMember = Dt.Columns(1).ToString
+        CbCategoria.DataSource = Dt
+        CbCategoria.Refresh()
     End Sub
     Private Sub _pCambiarFuente()
         Dim fuente As New Font("Tahoma", gi_fuenteTamano, FontStyle.Regular)
@@ -1173,7 +1194,8 @@ Public Class F02_PedidoNuevo
         'BBtn_Modificar.Enabled = False
         'BBtn_Eliminar.Enabled = False
         'BBtn_Grabar.Enabled = True
-
+        CbCategoria.Visible = True
+        lbCategoria.Visible = True
         Btn_AddProd.Enabled = True
         Btn_TerminarAdd.Enabled = True
 
@@ -1218,6 +1240,9 @@ Public Class F02_PedidoNuevo
 
         cbDistribuidor.ReadOnly = True
         cbPreVendedor.ReadOnly = True
+
+        CbCategoria.Visible = False
+        lbCategoria.Visible = False
 
         'BBtn_Nuevo.Enabled = True
         'BBtn_Modificar.Enabled = True
@@ -1278,7 +1303,7 @@ Public Class F02_PedidoNuevo
         Tb_CantProd2.Value = 0
         Tb_Fecha.Value = Now.Date
         dtpFechaVenc.Value = Now.Date
-
+        CbCategoria.SelectedIndex = 0
         If _nuevoBasePeriodico = True Then
             CheckBoxX1.Checked = False
             CheckBoxX2.Checked = False
@@ -3671,5 +3696,9 @@ Public Class F02_PedidoNuevo
         Catch ex As Exception
             MostrarMensajeError(ex.Message)
         End Try
+    End Sub
+
+    Private Sub CbCategoria_ValueChanged(sender As Object, e As EventArgs) Handles CbCategoria.ValueChanged
+        _PCargarGridProductosNuevo(CbCategoria.Value)
     End Sub
 End Class

@@ -4496,6 +4496,20 @@ Public Class AccesoLogica
         _Tabla = D_Datos_Tabla(_campos, "TC007", _Where + _order)
         Return _Tabla
     End Function
+
+    Public Shared Function L_CategoriaPrecioGeneralSinCosto(Optional _Cadena As String = "", Optional _order As String = "") As DataTable
+        Dim _Tabla As DataTable
+        Dim _Where, _campos As String
+        If _Cadena = "" Then
+            _Where = "1=1 and cinumi<>1"
+        Else
+            _Where = _Cadena
+        End If
+        _order = IIf(_order = "", "order by cinumi", " order by " + _order)
+        _campos = " cinumi,cidesc "
+        _Tabla = D_Datos_Tabla(_campos, "TC007", _Where + _order)
+        Return _Tabla
+    End Function
     Public Shared Function L_CategoriaPrecioGeneral2(Optional _Cadena As String = "", Optional _order As String = "") As DataTable
         Dim _Tabla As DataTable
         Dim _Where, _campos As String
